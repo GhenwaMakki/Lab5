@@ -1,5 +1,6 @@
 using Lab5_UMS.Application.Request.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lab5_UMS.API.Controllers;
@@ -32,5 +33,23 @@ public class TeacherController: ControllerBase
 
       var id = await _mediator.Send(command);
       return Ok(id);
+   }
+
+   [HttpPost]
+   public async Task<ActionResult<long>> AssignTeacherPerCoursePerSessionTime([FromBody] AssignCourseToSessionTimeCommand request)
+   {
+      if (request == null)
+      {
+         return BadRequest("Invalid request.");
+      }
+
+      var command = new AssignCourseToSessionTimeCommand();
+      command.SessionTimeId = request.SessionTimeId;
+      command.TeacherPerCourseId = request.TeacherPerCourseId;
+
+      var id = await _mediator.Send(command);
+
+      return Ok(id);
+
    }
 }
