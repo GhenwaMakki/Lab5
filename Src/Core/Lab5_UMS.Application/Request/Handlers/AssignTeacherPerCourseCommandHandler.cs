@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Lab5_UMS.Application.Request.Handlers;
 
-public class AssignTeacherPerCourseCommandHandler: IRequestHandler<AssignTeacherPerCourseCommand, long>
+public class AssignTeacherPerCourseCommandHandler: IRequestHandler<AssignTeacherPerCourseCommand, TeacherPerCourse>
 {
     private readonly UmsContext _context;
 
@@ -14,7 +14,7 @@ public class AssignTeacherPerCourseCommandHandler: IRequestHandler<AssignTeacher
         _context = context;
     }
     
-    public async Task<long> Handle(AssignTeacherPerCourseCommand request, CancellationToken cancellationToken)
+    public async Task<TeacherPerCourse> Handle(AssignTeacherPerCourseCommand request, CancellationToken cancellationToken)
     {
         var coursePreTeacher = new TeacherPerCourse()
         {
@@ -25,6 +25,6 @@ public class AssignTeacherPerCourseCommandHandler: IRequestHandler<AssignTeacher
         var newAssignment = await _context.TeacherPerCourses.AddAsync(coursePreTeacher, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
         
-        throw new NotImplementedException();
+        return newAssignment.Entity;
     }
 }
